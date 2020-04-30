@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Covid-19 Stats Tracker</title>
+  <meta content="" name="descriptison">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Montserrat:300,400,500,600,700"
+    rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/animate.css/animate.min.css" rel="stylesheet">
+  <link href="assets/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="assets/vendor/ionicons/css/ionicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/venobox/venobox.css" rel="stylesheet">
+  <link href="assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+  <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet"
+    crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header">
+    <!---
+    <div id="topbar">
+      <div class="container">
+        <div class="social-links">
+          <a href="#" class="twitter"><i class="fa fa-twitter"></i></a>
+          <a href="#" class="facebook"><i class="fa fa-facebook"></i></a>
+          <a href="#" class="linkedin"><i class="fa fa-linkedin"></i></a>
+          <a href="#" class="instagram"><i class="fa fa-instagram"></i></a>
+        </div>
+      </div>
+    </div>
+  -->
+    <div class="container">
+
+      <div class="logo float-left">
+        <!-- Uncomment below if you prefer to use an image logo -->
+        <h1 class="text-light"><a href="#intro" class="scrollto"><span>Covid-19 Stats Tracker</span></a></h1>
+        <!-- <a href="#header" class="scrollto"><img src="assets/img/logo.png" alt="" class="img-fluid"></a> -->
+      </div>
+
+      <nav class="main-nav float-right d-none d-lg-block">
+        <ul>
+          <!--<li class="active"><a href="#">Home</a></li>-->
+          <li><a href="#about">World Stats</a></li>
+          <li><a href="#services">Stats By Country</a></li>
+          <!--<li><a href="#footer">Contact Me</a></li>-->
+        </ul>
+
+      </nav><!-- .main-nav -->
+
+    </div>
+  </header><!-- #header -->
+
+  <!-- ======= Hero Section ======= 
+  <section id="hero" class="clearfix">
+    <div class="container d-flex h-100">
+      <div class="row justify-content-center align-self-center">
+        <div class="col-md-6 intro-info order-md-first order-last">
+          <h2>A tracker for the <br>for the <span>covid-19</span> Pandemic</h2>
+          <div>
+            <a href="#about" class="btn-get-started scrollto">World Stats</a>
+          </div>
+        </div>
+        <!--
+        <div class="col-md-6 intro-img order-md-last order-first">
+          <img src="assets/img/intro-img.svg" alt="" class="img-fluid">
+        </div>
+        
+      </div>
+
+    </div>
+  </section><!-- End Hero -->
+
+  <main id="main">
+    <!-- ======= About Section ======= -->
+    <section id="about" class="section-bg">
+      <div class="container-fluid">
+        <header class="section-header">
+          <h3>World Stats</h3>
+        </header>
+        <div class="card mb-4">
+          <div class="card-header"><i class="fas fa-chart-bar mr-1"></i>Daily Confirmed/Death Numbers
+          </div>
+          <div class="card-body"><canvas id="linearStep" width="100%" height="30"></canvas></div>
+          <div class="card-footer small text-muted" id="dataTableFooter"></div>
+        </div>
+        <div class="card mb-4">
+          <!--<div class="card-header"><i class="fas fa-chart-bar mr-1"></i>Cumulative World Numbers
+          </div>-->
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                  <tr>
+                    <!--<th>Date</th>-->
+                    <th>Country</th>
+                    <th>Confirmed</th>
+                    <th>Recovered</th>
+                    <th>Deaths</th>
+                    <th>Mortality Rate</th>
+                  </tr>
+                </thead>
+                <tfoot>
+                  <tr>
+                    <!--<th>Date</th>-->
+                    <th>Country</th>
+                    <th>Confirmed</th>
+                    <th>Recovered</th>
+                    <th>Deaths</th>
+                    <th>Mortality Rate</th>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+          <!--<div class="card-footer small text-muted" id="dataTableFooter"></div>-->
+        </div>
+      </div>
+
+    </section><!-- End About Section -->
+
+    <!-- ======= Services Section ======= -->
+    <section id="services" class="services section-bg">
+      <div class="container-fluid">
+        <header class="section-header">
+          <h3>Stats by Country</h3>
+        </header>
+        <div class="card mb-4">
+          <select class="selectpicker" data-live-search="true" id="countrySelectPicker" data-size="10">
+          </select>
+        </div>
+        <nav>
+          <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <a class="nav-item nav-link active" id="nav-daily-tab" data-toggle="tab" data-target="#nav-daily-by-country"
+              role="tab" aria-controls="nav-home" aria-selected="true">Daily Confirmed/Death Numbers</a>
+            <a class="nav-item nav-link" id="nav-cumulative-tab" data-toggle="tab" data-target="#nav-cumulative-by-country"
+              role="tab" aria-controls="nav-profile" aria-selected="false">Cumulative Confirmed/Death Numbers</a>
+        </nav>
+        <div class="tab-content" id="nav-tabContent">
+          <div class="tab-pane fade show active" id="nav-daily-by-country" role="tabpanel"
+            aria-labelledby="nav-home-tab">
+            <div class="card mb-4">
+              <div class="card-body"><canvas id="statsByCountry" width="100%" height="30"></canvas></div>
+              <div class="card-footer small text-muted" id="dailyChartsFooter"></div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="nav-cumulative-by-country" role="tabpanel" aria-labelledby="nav-profile-tab">
+            <div class="card mb-4">
+              <div class="card-body"><canvas id="cumulativeStatsByCountry" width="100%" height="30"></canvas>
+              </div>
+              <div class="card-footer small text-muted" id="cumulativeChartsFooter"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      </div>
+    </section><!-- End Services Section -->
+  </main>
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="section-bg">
+    <div class="container">
+      <div class="copyright">
+        &copy; Copyright <strong>Athrael Soju</strong>. All Rights Reserved
+      </div>
+    </div>
+  </footer><!-- End  Footer -->
+
+  <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/jquery/jquery.min.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/jquery.easing/jquery.easing.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="assets/vendor/counterup/counterup.min.js"></script>
+  <script src="assets/vendor/venobox/venobox.min.js"></script>
+  <script src="assets/vendor/mobile-nav/mobile-nav.js"></script>
+  <script src="assets/vendor/wow/wow.min.js"></script>
+  <script src="assets/vendor/owl.carousel/owl.carousel.min.js"></script>
+  <script src="assets/vendor/waypoints/jquery.waypoints.min.js"></script>
+
+  <!-- Additional Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/charts/charts.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/load-data.js"></script>
+</body>
+
+</html>
