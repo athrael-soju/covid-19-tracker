@@ -160,11 +160,7 @@ function print(msg) {
     console.log(msg);
   }
 }
-$('.nav-tabs a').click(function (e) {
-  e.preventDefault();
-  e.stopImmediatePropagation();
-  $(this).tab('show');
-});
+
 $("#countrySelectPicker").change(function (e) {
   populateChartsByCountry();
   populateCumulativeStatsByCountry();
