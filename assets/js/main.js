@@ -160,17 +160,15 @@ function print(msg) {
     console.log(msg);
   }
 }
-
-$(document).ready(function () {
-  $("#countrySelectPicker").change(function () {
-    populateChartsByCountry();
-    populateCumulativeStatsByCountry();
-  });
-
-  $('#nav-daily-tab #nav-cumulative-tab').click(function(e) {
-    //$(this).tab('show');
-    e.preventDefault();   
+$('.nav-tabs a').click(function (e) {
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  $(this).tab('show');
 });
-
+$("#countrySelectPicker").change(function (e) {
+  populateChartsByCountry();
+  populateCumulativeStatsByCountry();
+});
+$(document).ready(function () {
 
 });
