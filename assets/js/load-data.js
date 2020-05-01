@@ -54,7 +54,7 @@ function initData(covid19Data) {
 
         //  Build the selectPicker Dataset
         $('#countrySelectPicker').append('<option value="' + k + '">' + k + '</option>');
-
+        $('#compareCountrySelectPicker').append('<option value="' + k + '">' + k + '</option>');
         // Get latest data
         latestTableData.push(covid19Data[k][covid19Data[k].length - 1]);
 
@@ -96,7 +96,8 @@ function initData(covid19Data) {
     //  Refresh and set a default
     $("#countrySelectPicker").val("US");
     $("#countrySelectPicker").selectpicker("refresh");
-
+    $("#compareCountrySelectPicker").val("");
+    $("#compareCountrySelectPicker").selectpicker("refresh");
     //  Format data for chart use.
     confirmedList.forEach(function (item, index) {
         areaChartListDate.push(index);
