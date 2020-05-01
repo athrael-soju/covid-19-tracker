@@ -130,11 +130,6 @@ function populateCumulativeStatsByCountry() {
     setLinearStep("cumulativeStatsByCountry", areaChartListDate, confirmedForCountry, deathsForCountry);
 }
 
-function populateLatestNumbers() {
-    //  TODO: Develop functionality
-    setPieChart("latestNumbers", null, [100], [9]);
-}
-
 async function main() {
     covid19Data = await getData("https://pomber.github.io/covid19/timeseries.json");
 
@@ -143,7 +138,6 @@ async function main() {
     populateWorldChart();
     populateChartsByCountry();
     populateCumulativeStatsByCountry();
-    //populateLatestNumbers();
 }
 
 main();
