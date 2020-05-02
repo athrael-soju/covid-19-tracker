@@ -23,6 +23,6 @@ jobs:
     - name: FTP-Deploy-Action
       uses: actions/checkout@v2
       with:
-        ftp-server: ftp://ftp.athrael.net/test
+        ftp-server: ftp://ftp.athrael.net
         ftp-username: athraeln
         ftp-password: ${{ secrets.ftp_password }}
