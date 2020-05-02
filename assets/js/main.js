@@ -163,7 +163,7 @@ function print(msg) {
 
 $("#countrySelectPicker").change(function (e) {
   populateChartsByCountry();
-  populateCumulativeStatsByCountry();
+  populateCumulativeChartsByCountry();
 });
 
 $("#compareToCountrySelectPicker").change(function (e) {
