@@ -22,6 +22,6 @@ jobs:
      - name: FTP-Deploy-Action
        uses: SamKirkland/FTP-Deploy-Action@3.0.0
        with:
-         ftp-server: ftp://ftp.athrael.net
+         ftp-server: ftp://ftp.athrael.net:21/
          ftp-username: athraeln
          ftp-password: ${{ secrets.ftp_password }}
