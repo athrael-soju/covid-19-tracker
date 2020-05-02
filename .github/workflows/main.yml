@@ -25,3 +25,4 @@ jobs:
          ftp-server: ftp://ftp.athrael.net:21/home/athraeln
          ftp-username: athraeln
          ftp-password: ${{ secrets.ftp_password }}
+         git-ftp-args: --insecure # if your certificate is setup correctly this can be removed:  
