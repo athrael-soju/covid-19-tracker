@@ -165,6 +165,3 @@ $("#countrySelectPicker").change(function (e) {
   populateChartsByCountry();
   populateCumulativeStatsByCountry();
 });
-$(document).ready(function () {
-
-});
