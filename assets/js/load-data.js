@@ -54,7 +54,9 @@ function initData(covid19Data) {
 
         //  Build the selectPicker Dataset
         $('#countrySelectPicker').append('<option value="' + k + '">' + k + '</option>');
-        $('#compareCountrySelectPicker').append('<option value="' + k + '">' + k + '</option>');
+        $('#compareToCountrySelectPicker').append('<option value="' + k + '">' + k + '</option>');
+        $('#compareCountryAPicker').append('<option value="' + k + '">' + k + '</option>');
+        $('#compareCountryBPicker').append('<option value="' + k + '">' + k + '</option>');
         // Get latest data
         latestTableData.push(covid19Data[k][covid19Data[k].length - 1]);
 
@@ -96,8 +98,12 @@ function initData(covid19Data) {
     //  Refresh and set a default
     $("#countrySelectPicker").val("US");
     $("#countrySelectPicker").selectpicker("refresh");
-    $("#compareCountrySelectPicker").val("");
-    $("#compareCountrySelectPicker").selectpicker("refresh");
+
+    $("#compareCountryAPicker").val("Italy");
+    $("#compareCountryAPicker").selectpicker("refresh");
+    $("#compareCountryBPicker").val("Spain");
+    $("#compareCountryBPicker").selectpicker("refresh");
+
     //  Format data for chart use.
     confirmedList.forEach(function (item, index) {
         areaChartListDate.push(index);
@@ -110,7 +116,7 @@ function initData(covid19Data) {
 }
 
 function populateWorldChart() {
-    setLinearStep("linearStep", areaChartListDate, confirmedList, deathsList);
+    setLinearStep("linearStep", areaChartListDate, confirmedList, deathsList, ['Confirmed', 'Deaths']);
 }
 
 function populateTableData() {
@@ -121,14 +127,97 @@ function populateChartsByCountry() {
     var selectedCountry = $("#countrySelectPicker option:selected").text();
     confirmedForCountry = globalCountryList.get(selectedCountry)[0],
         deathsForCountry = globalCountryList.get(selectedCountry)[1];
-    setLinearStep("statsByCountry", areaChartListDate, confirmedForCountry, deathsForCountry);
+    setLinearStep("statsByCountry", areaChartListDate, confirmedForCountry, deathsForCountry, ['Confirmed', 'Deaths']);
 }
 
-function populateCumulativeStatsByCountry() {
+function populateCumulativeChartsByCountry() {
     var selectedCountry = $("#countrySelectPicker option:selected").text();
     confirmedForCountry = globalCountryListCumulative.get(selectedCountry)[0],
         deathsForCountry = globalCountryListCumulative.get(selectedCountry)[1];
-    setLinearStep("cumulativeStatsByCountry", areaChartListDate, confirmedForCountry, deathsForCountry);
+    setLinearStep("cumulativeStatsByCountry", areaChartListDate, confirmedForCountry, deathsForCountry, ['Confirmed', 'Deaths']);
+}
+
+function populateCompareCountryChart() {
+    var selectedCountryA = $("#compareCountryAPicker option:selected").text();
+    var selectedCountryB = $("#compareCountryBPicker option:selected").text();
+
+    var confirmedForCountryA = globalCountryList.get(selectedCountryA)[0],
+        confirmedForCountryB = globalCountryList.get(selectedCountryB)[0];
+    setLinearStep("compareCountryDataChart", areaChartListDate, confirmedForCountryA, confirmedForCountryB, [selectedCountryA, selectedCountryB]);
+}
+
+function populateChartsCompareToCountry() {
+    var selectedCountryCompareTo = $("#compareToCountrySelectPicker option:selected").text();
+    var areaChartCompareToListConfirmed = [], areaChartCompareToListDied = [];
+
+    var confirmed = globalCountryList.get(selectedCountryCompareTo)[0],
+        deaths = globalCountryList.get(selectedCountryCompareTo)[1];
+
+    //  Format data for chart use.
+    confirmed.forEach(function (item, index) {
+        areaChartCompareToListConfirmed.push(item);
+    });
+
+    deaths.forEach(function (item, index) {
+        areaChartCompareToListDied.push(item);
+    });
+
+    var compareToCountryConfirmed = {
+        label: selectedCountryCompareTo + ': Confirmed',
+        backgroundColor: "rgb(83, 127, 161)",
+        borderColor: "rgb(63, 10, 31)",
+        data: areaChartCompareToListConfirmed,
+        fill: false,
+    };
+
+    var compareToCountryDeaths = {
+        label: selectedCountryCompareTo + ': Deaths',
+        backgroundColor: "rgb(73, 127, 91)",
+        borderColor: "rgb(63, 55, 191)",
+        data: areaChartCompareToListDied,
+        fill: false,
+    };
+
+    chartList["statsByCountry"].data.datasets[2] = compareToCountryConfirmed;
+    chartList["statsByCountry"].data.datasets[3] = compareToCountryDeaths;
+    chartList["statsByCountry"].update();
+}
+
+function populateCumulativeChartsCompareToCountry() {
+    var selectedCountryCompareTo = $("#compareToCountrySelectPicker option:selected").text();
+    var areaChartCompareToListConfirmedCumulative = [], areaChartCompareToListDiedCumulative = [];
+
+    var confirmed = globalCountryListCumulative.get(selectedCountryCompareTo)[0],
+        deaths = globalCountryListCumulative.get(selectedCountryCompareTo)[1];
+
+    //  Format data for chart use.
+    confirmed.forEach(function (item, index) {
+        areaChartCompareToListConfirmedCumulative.push(item);
+    });
+
+    deaths.forEach(function (item, index) {
+        areaChartCompareToListDiedCumulative.push(item);
+    });
+
+    var compareToCountryConfirmedCumulative = {
+        label: selectedCountryCompareTo + ': Confirmed',
+        backgroundColor: "rgb(73, 127, 191)",
+        borderColor: "rgb(63, 100, 191)",
+        data: areaChartCompareToListConfirmedCumulative,
+        fill: false,
+    };
+
+    var compareToCountryDeathsCumulative = {
+        label: selectedCountryCompareTo + ': Deaths',
+        backgroundColor: "rgb(73, 127, 91)",
+        borderColor: "rgb(63, 55, 191)",
+        data: areaChartCompareToListDiedCumulative,
+        fill: false,
+    };
+
+    chartList["cumulativeStatsByCountry"].data.datasets[2] = compareToCountryConfirmedCumulative;
+    chartList["cumulativeStatsByCountry"].data.datasets[3] = compareToCountryDeathsCumulative;
+    chartList["cumulativeStatsByCountry"].update();
 }
 
 async function main() {
@@ -138,7 +227,8 @@ async function main() {
     populateTableData()
     populateWorldChart();
     populateChartsByCountry();
-    populateCumulativeStatsByCountry();
+    populateCumulativeChartsByCountry();
+    populateCompareCountryChart();
 }
 
 main();
