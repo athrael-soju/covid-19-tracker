@@ -22,7 +22,7 @@ jobs:
      - name: FTP-Deploy-Action
        uses: SamKirkland/FTP-Deploy-Action@3.0.0
        with:
-         ftp-server: ftpes://ftp.athrael.net:21/
+         ftp-server: ftps://ftp.athrael.net:21/
          ftp-username: athraeln
          ftp-password: ${{ secrets.ftp_password }}
          git-ftp-args: --insecure # if your certificate is setup correctly this can be removed
