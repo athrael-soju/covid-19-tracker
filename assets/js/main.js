@@ -171,6 +171,7 @@ $("#compareToCountrySelectPicker").change(function (e) {
   populateCumulativeChartsCompareToCountry();
 });
 
-$("#compareCountryAPicker,#compareCountryBPicker").change(function (e) {
+$("#compareCountryAPicker,#compareCountryBPicker,#daily-btn-grp").change(function (e) {
   populateCompareCountryChart();
 });
+
