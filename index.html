@@ -62,7 +62,11 @@
         <ul>
           <!--<li class="active"><a href="#">Home</a></li>-->
           <li><a href="#about">World Stats</a></li>
+<<<<<<< HEAD
           <li><a href="#services">Stats By Country</a></li>
+=======
+          <li><a href="#stats-by-country">Stats By Country</a></li>
+>>>>>>> ab1707700711b97f73381f7ad3ab62ed11ba0f38
           <li><a href="#compare-country-data">Compare Country Data</a></li>
           <!--<li><a href="#footer">Contact Me</a></li>-->
         </ul>
@@ -142,12 +146,21 @@
         <header class="section-header">
           <h3>Stats by Country</h3>
         </header>
+<<<<<<< HEAD
         <div class="card-header" style="text-align:center"><i class="fas fa-chart-bar mr-1"></i>
+=======
+        <hr>
+        <div style="text-align:center">
+>>>>>>> ab1707700711b97f73381f7ad3ab62ed11ba0f38
           <strong>
             <select class="selectpicker" data-live-search="true" id="countrySelectPicker" data-size="10"></select>
             </select>
           </strong>
         </div>
+<<<<<<< HEAD
+=======
+        <hr>
+>>>>>>> ab1707700711b97f73381f7ad3ab62ed11ba0f38
         <div><i class="fas fa-chart-bar mr-1"></i>
           <div class="row">
             <div class="col-xl-6">
@@ -178,7 +191,12 @@
         <header class="section-header">
           <h3>Compare Country Data</h3>
         </header>
+<<<<<<< HEAD
         <div class="card-header" style="text-align:center">
+=======
+        <hr>
+        <div style="text-align:center">
+>>>>>>> ab1707700711b97f73381f7ad3ab62ed11ba0f38
           <select class="selectpicker" data-live-search="true" id="compareCountryAPicker" data-size="10">
           </select>
           <strong>Vs</strong>
@@ -187,8 +205,24 @@
         </div>
         <div><i class="fas fa-chart-bar mr-1"></i>
           <div class="card mb-4">
+<<<<<<< HEAD
             <div class="card-header" style="text-align:center"><i class="fas fa-chart-bar mr-1"></i>Daily
               Confirmed/Death Numbers
+=======
+            <div class="card-header" style="text-align:center"><i class="fas fa-chart-bar mr-1"></i>
+              <div class="btn-group btn-group-toggle" data-toggle="buttons" id="daily-btn-grp">
+                <label class="btn btn-primary active">
+                  <input type="radio" name="options" value=0 id="btn-confirmed" autocomplete="off" checked>
+                  Confirmed
+                </label>
+                <label class="btn btn-primary">
+                  <input type="radio" name="options" value=1 id="btn-deaths" autocomplete="off"> Deaths
+                </label>
+                <label class="btn btn-primary">
+                  <input type="radio" name="options" value=2 id="btn-recovered" autocomplete="off"> Recovered
+                </label>
+              </div>
+>>>>>>> ab1707700711b97f73381f7ad3ab62ed11ba0f38
             </div>
             <div class="card-body"><canvas id="compareCountryDataChart" width="100%" height="30"></canvas></div>
             <div class="card-footer small text-muted" id="dataTableFooter"></div>
@@ -201,7 +235,10 @@
   <footer id="footer" class="section-bg">
     <div class="container">
       <div class="copyright">
-        &copy; Copyright <strong>Athrael Soju</strong>. All Rights Reserved
+        &copy; Copyright <strong>Athrael Soju</strong>. All Rights Reserved.
+        <br />
+        Data provided by <a href="https://www.jhu.edu/" target="_blank">John Hopkins University</a> and updated daily in
+        JSON format by <a href="https://github.com/pomber/covid19" target="_blank">Pomber</a>
       </div>
     </div>
   </footer><!-- End  Footer -->

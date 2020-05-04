@@ -2,4 +2,7 @@ TODO
 ----
 1. Significant refactoring
 2. Redesign graph rendering to update graph instead of a full redraw after change.
+<<<<<<< HEAD
 3. Add options to compareTo feature.
+=======
+>>>>>>> ab1707700711b97f73381f7ad3ab62ed11ba0f38
