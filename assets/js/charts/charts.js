@@ -10,7 +10,9 @@ async function setDataTableData(latestDate, latestTableData) {
             { "data": "mortalityRate" }
         ],
         select: true,
-        "order": [[1, "desc"]]
+        "order": [
+            [1, "desc"]
+        ]
     });
 }
 
@@ -20,11 +22,11 @@ async function setLinearStep(chart, areaChartListDate, listA, listB, labelList) 
         arrayB = [];
 
     //  Format data for chart use.
-    listA.forEach(function (item, index) {
+    listA.forEach(function(item, index) {
         arrayA.push(item);
     });
 
-    listB.forEach(function (item, index) {
+    listB.forEach(function(item, index) {
         arrayB.push(item);
     });
 

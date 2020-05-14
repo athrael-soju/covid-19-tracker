@@ -47,7 +47,9 @@ async function getData(url) {
 }
 
 function initData(covid19Data) {
-    var previousDayDeaths = 0, previousDayConfirmed = 0, previousDayRecovered = 0;
+    var previousDayDeaths = 0,
+        previousDayConfirmed = 0,
+        previousDayRecovered = 0;
     Object.keys(covid19Data).forEach(function (k) {
         var mortalityRate = ((covid19Data[k][covid19Data[k].length - 1].deaths /
             covid19Data[k][covid19Data[k].length - 1].confirmed) * 100).toFixed(2) + "%";
