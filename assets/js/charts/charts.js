@@ -18,15 +18,14 @@ async function setDataTableData(latestDate, latestTableData) {
 
 async function setLinearStep(chart, areaChartListDate, listA, listB, labelList) {
 
-    arrayA = [],
-        arrayB = [];
+    arrayA = [], arrayB = [];
 
     //  Format data for chart use.
-    listA.forEach(function(item, index) {
+    listA.forEach(function (item, index) {
         arrayA.push(item);
     });
 
-    listB.forEach(function(item, index) {
+    listB.forEach(function (item, index) {
         arrayB.push(item);
     });
 

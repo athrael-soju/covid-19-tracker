@@ -21,17 +21,10 @@
  */
 var latestTableData = [];
 
-let deathsList = new Map(),
-    confirmedList = new Map(),
-    recoveredList = new Map(),
-    countrySpecificConfirmed = new Map(),
-    countrySpecificDeaths = new Map(),
-    countrySpecificRecovered = new Map(),
-    countrySpecificConfirmedCumulative = new Map(),
-    countrySpecificDeathsCumulative = new Map(),
-    globalCountryList = new Map(),
-    globalCountryListCumulative = new Map(),
-    datesList = [];
+let deathsList = new Map(), confirmedList = new Map(), recoveredList = new Map(),
+    countrySpecificConfirmed = new Map(), countrySpecificDeaths = new Map(), countrySpecificRecovered = new Map(),
+    countrySpecificConfirmedCumulative = new Map(), countrySpecificDeathsCumulative = new Map(), globalCountryList = new Map(),
+    globalCountryListCumulative = new Map();
 
 var areaChartListDate = [];
 
@@ -57,33 +50,17 @@ function initData(covid19Data) {
         covid19Data[k][covid19Data[k].length - 1].mortalityRate = mortalityRate;
 
         //  Build the selectPicker Dataset
-        $('#countrySelectPicker').append('<option value="' + k + '">' + k + '</option>');
-        $('#compareToCountrySelectPicker').append('<option value="' + k + '">' + k + '</option>');
-        $('#compareCountryAPicker').append('<option value="' + k + '">' + k + '</option>');
-        $('#compareCountryBPicker').append('<option value="' + k + '">' + k + '</option>');
+        updateSelectPickers(k);
         // Get latest data
         latestTableData.push(covid19Data[k][covid19Data[k].length - 1]);
 
         // Get global death and infections
         covid19Data[k].forEach(function (y) {
+
             if (confirmedList.get(y.date) == null) {
                 confirmedList.set(y.date, 0);
-            }
-            if (deathsList.get(y.date) == null) {
                 deathsList.set(y.date, 0);
-            }
-            if (recoveredList.get(y.date) == null) {
                 recoveredList.set(y.date, 0);
-            }
-
-            if (countrySpecificConfirmed.get(y.date) == null) {
-                countrySpecificConfirmed.set(y.date, 0);
-            }
-            if (countrySpecificDeaths.get(y.date) == null) {
-                countrySpecificDeaths.set(y.date, 0);
-            }
-            if (countrySpecificRecovered.get(y.date) == null) {
-                countrySpecificRecovered.set(y.date, 0);
             }
 
             confirmedList.set(y.date, confirmedList.get(y.date) + (y.confirmed - previousDayConfirmed));
@@ -103,11 +80,9 @@ function initData(covid19Data) {
         });
         globalCountryList.set(k, [countrySpecificConfirmed, countrySpecificDeaths, countrySpecificRecovered]);
         globalCountryListCumulative.set(k, [countrySpecificConfirmedCumulative, countrySpecificDeathsCumulative])
-        countrySpecificConfirmed = new Map(),
-            countrySpecificDeaths = new Map(),
-            countrySpecificRecovered = new Map(),
-            countrySpecificConfirmedCumulative = new Map(),
-            countrySpecificDeathsCumulative = new Map();
+
+        countrySpecificConfirmed = new Map(), countrySpecificDeaths = new Map(), countrySpecificRecovered = new Map(),
+            countrySpecificConfirmedCumulative = new Map(), countrySpecificDeathsCumulative = new Map();
     });
 
     //  Format data for chart use.
@@ -116,19 +91,9 @@ function initData(covid19Data) {
     });
 
     //  Refresh and set a default
-    $("#countrySelectPicker").val("US");
-    $("#countrySelectPicker").selectpicker("refresh");
-
-    $("#compareCountryAPicker").val("Italy");
-    $("#compareCountryAPicker").selectpicker("refresh");
-    $("#compareCountryBPicker").val("Spain");
-    $("#compareCountryBPicker").selectpicker("refresh");
-
-    $('#dailyChartsFooter').text('Updated: ' + areaChartListDate[areaChartListDate.length - 1]);
-    $('#cumulativeChartsFooter').text('Updated: ' + areaChartListDate[areaChartListDate.length - 1]);
-    $('#worldChartsFooter').text('Updated: ' + areaChartListDate[areaChartListDate.length - 1]);
-    $('#dataTableFooter').text('Updated: ' + areaChartListDate[areaChartListDate.length - 1]);
+    updateSelectPickersAndFooters();
 }
+
 
 function populateWorldChart() {
     setLinearStep("linearStep", areaChartListDate, confirmedList, deathsList, ['Confirmed', 'Deaths']);
@@ -159,6 +124,27 @@ function populateCompareCountryChart() {
     var countryDataA = globalCountryList.get(selectedCountryA)[selectedData],
         countryDataB = globalCountryList.get(selectedCountryB)[selectedData];
     setLinearStep("compareCountryDataChart", areaChartListDate, countryDataA, countryDataB, [selectedCountryA, selectedCountryB]);
+}
+function updateSelectPickers(k) {
+    $('#countrySelectPicker').append('<option value="' + k + '">' + k + '</option>');
+    $('#compareToCountrySelectPicker').append('<option value="' + k + '">' + k + '</option>');
+    $('#compareCountryAPicker').append('<option value="' + k + '">' + k + '</option>');
+    $('#compareCountryBPicker').append('<option value="' + k + '">' + k + '</option>');
+}
+
+function updateSelectPickersAndFooters() {
+    $("#countrySelectPicker").val("US");
+    $("#countrySelectPicker").selectpicker("refresh");
+
+    $("#compareCountryAPicker").val("Italy");
+    $("#compareCountryAPicker").selectpicker("refresh");
+    $("#compareCountryBPicker").val("Spain");
+    $("#compareCountryBPicker").selectpicker("refresh");
+
+    $('#dailyChartsFooter').text('Updated: ' + areaChartListDate[areaChartListDate.length - 1]);
+    $('#cumulativeChartsFooter').text('Updated: ' + areaChartListDate[areaChartListDate.length - 1]);
+    $('#worldChartsFooter').text('Updated: ' + areaChartListDate[areaChartListDate.length - 1]);
+    $('#dataTableFooter').text('Updated: ' + areaChartListDate[areaChartListDate.length - 1]);
 }
 
 async function main() {
