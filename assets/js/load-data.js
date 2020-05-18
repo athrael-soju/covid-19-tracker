@@ -33,7 +33,7 @@ async function getData(url) {
     return response.json()
 }
 
-function initData(covid19Data) {    
+function initData(covid19Data) {
     var previousDayDeaths = 0, previousDayConfirmed = 0, previousDayRecovered = 0;
 
     Object.keys(covid19Data).forEach(function (k) {
@@ -60,19 +60,20 @@ function initData(covid19Data) {
             deathsList.set(country.date, deathsList.get(country.date) + (country.deaths - previousDayDeaths));
             recoveredList.set(country.date, recoveredList.get(country.date) + (country.recovered - previousDayRecovered));
 
-            countrySpecificConfirmed.set(country.date, country.confirmed - previousDayConfirmed)
-            countrySpecificDeaths.set(country.date, country.deaths - previousDayDeaths)
-            countrySpecificRecovered.set(country.date, country.recovered - previousDayRecovered)
+            countrySpecificConfirmed.set(country.date, country.confirmed - previousDayConfirmed);
+            countrySpecificDeaths.set(country.date, country.deaths - previousDayDeaths);
+            countrySpecificRecovered.set(country.date, country.recovered - previousDayRecovered);
 
-            countrySpecificConfirmedCumulative.set(country.date, country.confirmed)
-            countrySpecificDeathsCumulative.set(country.date, country.deaths)
+            countrySpecificConfirmedCumulative.set(country.date, country.confirmed);
+            countrySpecificDeathsCumulative.set(country.date, country.deaths);
 
             previousDayDeaths = country.deaths;
             previousDayConfirmed = country.confirmed;
             previousDayRecovered = country.recovered;
         });
+
         globalCountryList.set(k, [countrySpecificConfirmed, countrySpecificDeaths, countrySpecificRecovered]);
-        globalCountryListCumulative.set(k, [countrySpecificConfirmedCumulative, countrySpecificDeathsCumulative])
+        globalCountryListCumulative.set(k, [countrySpecificConfirmedCumulative, countrySpecificDeathsCumulative]);
 
         countrySpecificConfirmed = new Map(), countrySpecificDeaths = new Map(), countrySpecificRecovered = new Map(),
             countrySpecificConfirmedCumulative = new Map(), countrySpecificDeathsCumulative = new Map();
@@ -86,7 +87,6 @@ function initData(covid19Data) {
     //  Refresh and set a default
     updateSelectPickersAndFooters();
 }
-
 
 function populateWorldChart() {
     setLinearStep("linearStep", areaChartListDate, confirmedList, deathsList, ['Confirmed', 'Deaths']);
