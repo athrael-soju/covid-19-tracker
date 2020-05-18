@@ -155,7 +155,6 @@
 })(jQuery);
 
 function print(msg) {
-    // shows console msg if debug is on else does nothing
     if (typeof console !== 'undefined') {
         console.log(msg);
     }

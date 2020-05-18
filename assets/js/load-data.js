@@ -19,30 +19,23 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  */
-var latestTableData = [];
+var latestTableData = [], areaChartListDate = [], chartList = [];
 
 let deathsList = new Map(), confirmedList = new Map(), recoveredList = new Map(),
     countrySpecificConfirmed = new Map(), countrySpecificDeaths = new Map(), countrySpecificRecovered = new Map(),
     countrySpecificConfirmedCumulative = new Map(), countrySpecificDeathsCumulative = new Map(), globalCountryList = new Map(),
     globalCountryListCumulative = new Map();
 
-var areaChartListDate = [];
-
-var dailyInfections = 0,
-    dailyDeaths = 0;
-
-
-var chartList = [];
+var dailyInfections = 0, dailyDeaths = 0;
 
 async function getData(url) {
     const response = await fetch(url);
     return response.json()
 }
 
-function initData(covid19Data) {
-    var previousDayDeaths = 0,
-        previousDayConfirmed = 0,
-        previousDayRecovered = 0;
+function initData(covid19Data) {    
+    var previousDayDeaths = 0, previousDayConfirmed = 0, previousDayRecovered = 0;
+
     Object.keys(covid19Data).forEach(function (k) {
         var mortalityRate = ((covid19Data[k][covid19Data[k].length - 1].deaths /
             covid19Data[k][covid19Data[k].length - 1].confirmed) * 100).toFixed(2) + "%";
@@ -55,28 +48,28 @@ function initData(covid19Data) {
         latestTableData.push(covid19Data[k][covid19Data[k].length - 1]);
 
         // Get global death and infections
-        covid19Data[k].forEach(function (y) {
+        covid19Data[k].forEach(function (country) {
 
-            if (confirmedList.get(y.date) == null) {
-                confirmedList.set(y.date, 0);
-                deathsList.set(y.date, 0);
-                recoveredList.set(y.date, 0);
+            if (confirmedList.get(country.date) == null) {
+                confirmedList.set(country.date, 0);
+                deathsList.set(country.date, 0);
+                recoveredList.set(country.date, 0);
             }
 
-            confirmedList.set(y.date, confirmedList.get(y.date) + (y.confirmed - previousDayConfirmed));
-            deathsList.set(y.date, deathsList.get(y.date) + (y.deaths - previousDayDeaths));
-            recoveredList.set(y.date, recoveredList.get(y.date) + (y.recovered - previousDayRecovered));
+            confirmedList.set(country.date, confirmedList.get(country.date) + (country.confirmed - previousDayConfirmed));
+            deathsList.set(country.date, deathsList.get(country.date) + (country.deaths - previousDayDeaths));
+            recoveredList.set(country.date, recoveredList.get(country.date) + (country.recovered - previousDayRecovered));
 
-            countrySpecificConfirmed.set(y.date, y.confirmed - previousDayConfirmed)
-            countrySpecificDeaths.set(y.date, y.deaths - previousDayDeaths)
-            countrySpecificRecovered.set(y.date, y.recovered - previousDayRecovered)
+            countrySpecificConfirmed.set(country.date, country.confirmed - previousDayConfirmed)
+            countrySpecificDeaths.set(country.date, country.deaths - previousDayDeaths)
+            countrySpecificRecovered.set(country.date, country.recovered - previousDayRecovered)
 
-            countrySpecificConfirmedCumulative.set(y.date, y.confirmed)
-            countrySpecificDeathsCumulative.set(y.date, y.deaths)
+            countrySpecificConfirmedCumulative.set(country.date, country.confirmed)
+            countrySpecificDeathsCumulative.set(country.date, country.deaths)
 
-            previousDayDeaths = y.deaths;
-            previousDayConfirmed = y.confirmed;
-            previousDayRecovered = y.recovered;
+            previousDayDeaths = country.deaths;
+            previousDayConfirmed = country.confirmed;
+            previousDayRecovered = country.recovered;
         });
         globalCountryList.set(k, [countrySpecificConfirmed, countrySpecificDeaths, countrySpecificRecovered]);
         globalCountryListCumulative.set(k, [countrySpecificConfirmedCumulative, countrySpecificDeathsCumulative])
