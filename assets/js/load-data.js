@@ -19,25 +19,14 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  */
-var latestTableData = [];
+var latestTableData = [], areaChartListDate = [], chartList = [];
 
-let deathsList = new Map(),
-    confirmedList = new Map(),
-    countrySpecificConfirmed = new Map(),
-    countrySpecificDeaths = new Map(),
-    countrySpecificConfirmedCumulative = new Map(),
-    countrySpecificDeathsCumulative = new Map(),
-    globalCountryList = new Map(),
-    globalCountryListCumulative = new Map(),
-    datesList = [];
+let deathsList = new Map(), confirmedList = new Map(), recoveredList = new Map(),
+    countrySpecificConfirmed = new Map(), countrySpecificDeaths = new Map(), countrySpecificRecovered = new Map(),
+    countrySpecificConfirmedCumulative = new Map(), countrySpecificDeathsCumulative = new Map(), globalCountryList = new Map(),
+    globalCountryListCumulative = new Map();
 
-var areaChartListDate = [];
-
-var dailyInfections = 0,
-    dailyDeaths = 0;
-
-
-var chartList = [];
+var dailyInfections = 0, dailyDeaths = 0;
 
 async function getData(url) {
     const response = await fetch(url);
@@ -45,7 +34,8 @@ async function getData(url) {
 }
 
 function initData(covid19Data) {
-    var previousDayDeaths = 0, previousDayConfirmed = 0;
+    var previousDayDeaths = 0, previousDayConfirmed = 0, previousDayRecovered = 0;
+
     Object.keys(covid19Data).forEach(function (k) {
         var mortalityRate = ((covid19Data[k][covid19Data[k].length - 1].deaths /
             covid19Data[k][covid19Data[k].length - 1].confirmed) * 100).toFixed(2) + "%";
@@ -53,63 +43,53 @@ function initData(covid19Data) {
         covid19Data[k][covid19Data[k].length - 1].mortalityRate = mortalityRate;
 
         //  Build the selectPicker Dataset
-        $('#countrySelectPicker').append('<option value="' + k + '">' + k + '</option>');
-
+        updateSelectPickers(k);
         // Get latest data
         latestTableData.push(covid19Data[k][covid19Data[k].length - 1]);
 
         // Get global death and infections
-        covid19Data[k].forEach(function (y) {
-            if (confirmedList.get(y.date) == null) {
-                confirmedList.set(y.date, 0);
-            }
-            if (deathsList.get(y.date) == null) {
-                deathsList.set(y.date, 0);
-            }
+        covid19Data[k].forEach(function (country) {
 
-            if (countrySpecificConfirmed.get(y.date) == null) {
-                countrySpecificConfirmed.set(y.date, 0);
-            }
-            if (countrySpecificDeaths.get(y.date) == null) {
-                countrySpecificDeaths.set(y.date, 0);
+            if (confirmedList.get(country.date) == null) {
+                confirmedList.set(country.date, 0);
+                deathsList.set(country.date, 0);
+                recoveredList.set(country.date, 0);
             }
 
-            confirmedList.set(y.date, confirmedList.get(y.date) + (y.confirmed - previousDayConfirmed));
-            deathsList.set(y.date, deathsList.get(y.date) + (y.deaths - previousDayDeaths));
-            countrySpecificConfirmed.set(y.date, y.confirmed - previousDayConfirmed)
-            countrySpecificDeaths.set(y.date, y.deaths - previousDayDeaths)
+            confirmedList.set(country.date, confirmedList.get(country.date) + (country.confirmed - previousDayConfirmed));
+            deathsList.set(country.date, deathsList.get(country.date) + (country.deaths - previousDayDeaths));
+            recoveredList.set(country.date, recoveredList.get(country.date) + (country.recovered - previousDayRecovered));
 
-            countrySpecificConfirmedCumulative.set(y.date, y.confirmed)
-            countrySpecificDeathsCumulative.set(y.date, y.deaths)
+            countrySpecificConfirmed.set(country.date, country.confirmed - previousDayConfirmed);
+            countrySpecificDeaths.set(country.date, country.deaths - previousDayDeaths);
+            countrySpecificRecovered.set(country.date, country.recovered - previousDayRecovered);
 
-            previousDayDeaths = y.deaths;
-            previousDayConfirmed = y.confirmed;
+            countrySpecificConfirmedCumulative.set(country.date, country.confirmed);
+            countrySpecificDeathsCumulative.set(country.date, country.deaths);
+
+            previousDayDeaths = country.deaths;
+            previousDayConfirmed = country.confirmed;
+            previousDayRecovered = country.recovered;
         });
-        globalCountryList.set(k, [countrySpecificConfirmed, countrySpecificDeaths]);
-        globalCountryListCumulative.set(k, [countrySpecificConfirmedCumulative, countrySpecificDeathsCumulative])
-        countrySpecificConfirmed = new Map(),
-            countrySpecificDeaths = new Map(),
-            countrySpecificConfirmedCumulative = new Map(),
-            countrySpecificDeathsCumulative = new Map();
-    });
 
-    //  Refresh and set a default
-    $("#countrySelectPicker").val("US");
-    $("#countrySelectPicker").selectpicker("refresh");
+        globalCountryList.set(k, [countrySpecificConfirmed, countrySpecificDeaths, countrySpecificRecovered]);
+        globalCountryListCumulative.set(k, [countrySpecificConfirmedCumulative, countrySpecificDeathsCumulative]);
+
+        countrySpecificConfirmed = new Map(), countrySpecificDeaths = new Map(), countrySpecificRecovered = new Map(),
+            countrySpecificConfirmedCumulative = new Map(), countrySpecificDeathsCumulative = new Map();
+    });
 
     //  Format data for chart use.
     confirmedList.forEach(function (item, index) {
         areaChartListDate.push(index);
     });
 
-    $('#dailyChartsFooter').text('Updated: ' + areaChartListDate[areaChartListDate.length - 1]);
-    $('#cumulativeChartsFooter').text('Updated: ' + areaChartListDate[areaChartListDate.length - 1]);
-    $('#worldChartsFooter').text('Updated: ' + areaChartListDate[areaChartListDate.length - 1]);
-    $('#dataTableFooter').text('Updated: ' + areaChartListDate[areaChartListDate.length - 1]);
+    //  Refresh and set a default
+    updateSelectPickersAndFooters();
 }
 
 function populateWorldChart() {
-    setLinearStep("linearStep", areaChartListDate, confirmedList, deathsList);
+    setLinearStep("linearStep", areaChartListDate, confirmedList, deathsList, ['Confirmed', 'Deaths']);
 }
 
 function populateTableData() {
@@ -120,19 +100,44 @@ function populateChartsByCountry() {
     var selectedCountry = $("#countrySelectPicker option:selected").text();
     confirmedForCountry = globalCountryList.get(selectedCountry)[0],
         deathsForCountry = globalCountryList.get(selectedCountry)[1];
-    setLinearStep("statsByCountry", areaChartListDate, confirmedForCountry, deathsForCountry);
+    setLinearStep("statsByCountry", areaChartListDate, confirmedForCountry, deathsForCountry, ['Confirmed', 'Deaths']);
 }
 
-function populateCumulativeStatsByCountry() {
+function populateCumulativeChartsByCountry() {
     var selectedCountry = $("#countrySelectPicker option:selected").text();
     confirmedForCountry = globalCountryListCumulative.get(selectedCountry)[0],
         deathsForCountry = globalCountryListCumulative.get(selectedCountry)[1];
-    setLinearStep("cumulativeStatsByCountry", areaChartListDate, confirmedForCountry, deathsForCountry);
+    setLinearStep("cumulativeStatsByCountry", areaChartListDate, confirmedForCountry, deathsForCountry, ['Confirmed', 'Deaths']);
 }
 
-function populateLatestNumbers() {
-    //  TODO: Develop functionality
-    setPieChart("latestNumbers", null, [100], [9]);
+function populateCompareCountryChart() {
+    var selectedCountryA = $("#compareCountryAPicker option:selected").text();
+    var selectedCountryB = $("#compareCountryBPicker option:selected").text();
+    var selectedData = $("input[name='options']:checked").val();
+    var countryDataA = globalCountryList.get(selectedCountryA)[selectedData],
+        countryDataB = globalCountryList.get(selectedCountryB)[selectedData];
+    setLinearStep("compareCountryDataChart", areaChartListDate, countryDataA, countryDataB, [selectedCountryA, selectedCountryB]);
+}
+function updateSelectPickers(k) {
+    $('#countrySelectPicker').append('<option value="' + k + '">' + k + '</option>');
+    $('#compareToCountrySelectPicker').append('<option value="' + k + '">' + k + '</option>');
+    $('#compareCountryAPicker').append('<option value="' + k + '">' + k + '</option>');
+    $('#compareCountryBPicker').append('<option value="' + k + '">' + k + '</option>');
+}
+
+function updateSelectPickersAndFooters() {
+    $("#countrySelectPicker").val("US");
+    $("#countrySelectPicker").selectpicker("refresh");
+
+    $("#compareCountryAPicker").val("Italy");
+    $("#compareCountryAPicker").selectpicker("refresh");
+    $("#compareCountryBPicker").val("Spain");
+    $("#compareCountryBPicker").selectpicker("refresh");
+
+    $('#dailyChartsFooter').text('Updated: ' + areaChartListDate[areaChartListDate.length - 1]);
+    $('#cumulativeChartsFooter').text('Updated: ' + areaChartListDate[areaChartListDate.length - 1]);
+    $('#worldChartsFooter').text('Updated: ' + areaChartListDate[areaChartListDate.length - 1]);
+    $('#dataTableFooter').text('Updated: ' + areaChartListDate[areaChartListDate.length - 1]);
 }
 
 async function main() {
@@ -142,8 +147,8 @@ async function main() {
     populateTableData()
     populateWorldChart();
     populateChartsByCountry();
-    populateCumulativeStatsByCountry();
-    //populateLatestNumbers();
+    populateCumulativeChartsByCountry();
+    populateCompareCountryChart();
 }
 
 main();

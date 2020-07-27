@@ -10,22 +10,23 @@ async function setDataTableData(latestDate, latestTableData) {
             { "data": "mortalityRate" }
         ],
         select: true,
-        "order": [[1, "desc"]]
+        "order": [
+            [1, "desc"]
+        ]
     });
 }
 
-async function setLinearStep(chart, areaChartListDate, confirmedList, deathsList) {
+async function setLinearStep(chart, areaChartListDate, listA, listB, labelList) {
 
-    areaChartListConfirmed = [],
-        areaChartListDied = [];
+    arrayA = [], arrayB = [];
 
     //  Format data for chart use.
-    confirmedList.forEach(function (item, index) {
-        areaChartListConfirmed.push(item);
+    listA.forEach(function (item, index) {
+        arrayA.push(item);
     });
 
-    deathsList.forEach(function (item, index) {
-        areaChartListDied.push(item);
+    listB.forEach(function (item, index) {
+        arrayB.push(item);
     });
 
     var ctx = document.getElementById(chart).getContext("2d");
@@ -38,17 +39,17 @@ async function setLinearStep(chart, areaChartListDate, confirmedList, deathsList
         data: {
             labels: areaChartListDate,
             datasets: [{
-                label: 'Confirmed Cases',
+                label: labelList[0],
                 backgroundColor: "rgb(63, 127, 191)",
                 borderColor: "rgb(63, 127, 191)",
-                data: areaChartListConfirmed,
+                data: arrayA,
                 fill: false,
             }, {
-                label: 'Deaths',
+                label: labelList[1],
                 fill: false,
                 backgroundColor: "rgb(191, 63, 63)",
                 borderColor: "rgb(191, 63, 63)",
-                data: areaChartListDied,
+                data: arrayB,
             }]
         },
         options: {
